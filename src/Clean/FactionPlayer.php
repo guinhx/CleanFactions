@@ -9,6 +9,11 @@ class FactionPlayer extends Player {
     private $fid = "";
     private $role = MemberRole::UNKNOWN;
 
+    public function resetData() {
+        $this->fid = "";
+        $this->role = MemberRole::UNKNOWN;
+    }
+
     /**
      * @return int
      */

@@ -4,6 +4,7 @@ namespace Clean\view;
 
 use Clean\enum\MemberRole;
 use Clean\FactionPlayer;
+use Clean\Factions;
 
 class MainView extends BaseView {
 
@@ -16,7 +17,8 @@ class MainView extends BaseView {
                 "Fundar uma facção",
                 "(Mais detalhes)"
             ], function (FactionPlayer $player) {
-
+                $view = new CreateFactionView();
+                $view->send($player);
             });
             $this->addButton([
                 "Entrar em uma facção",
@@ -42,7 +44,11 @@ class MainView extends BaseView {
                     $this->addButton([
                         "Deletar sua facção"
                     ], function (FactionPlayer $player) {
-
+                        if(Factions::getInstance()->removeFaction($player->getFaction())) {
+                            $player->sendMessage("§aSua facção foi deletada com sucesso.");
+                        }else{
+                            $player->sendMessage("§cOcorreu um erro ao deletar, tente novamente mais tarde.");
+                        }
                     });
                     break;
                 case MemberRole::OFFICER:

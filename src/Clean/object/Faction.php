@@ -104,11 +104,11 @@ class Faction {
         return strtolower($this->owner) == strtolower($owner);
     }
 
-    public function insertMember(string $name) {
+    public function insertMember(string $name, int $role = MemberRole::MEMBER) {
         $member = new Member();
         $member->setFid($this->id);
         $member->setName($name);
-        $member->setRole(MemberRole::MEMBER);
+        $member->setRole($role);
         $this->members[strtolower($name)] = $member;
     }
 

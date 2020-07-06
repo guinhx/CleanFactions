@@ -105,6 +105,29 @@ class Factions extends PluginBase {
         $this->factions = $factions;
     }
 
+    public function insertFaction(Faction $faction) {
+        $this->factions[$faction->getId()] = $faction;
+        // não precisa salvar de imediato na db, pois ao desligar já vai salvar tudo do array mesmo.
+    }
+
+    public function removeFaction(Faction $faction) {
+        if(array_key_exists($faction->getId(), $this->factions)) {
+            foreach ($faction->getMembers() as $member) {
+                $player = Server::getInstance()->getPlayerExact($member->getName());
+                if($player instanceof FactionPlayer) {
+                    $player->resetData();
+                }
+            }
+            unset($this->factions[$faction->getId()]);
+            return true;
+            // code aqui para remover da database também.. pq na hora de salvar pode dar b.o
+            // code
+            // code
+        }else{
+            return false;
+        }
+    }
+
     /**
      * @return Claim[]
      */
@@ -119,10 +142,6 @@ class Factions extends PluginBase {
     public function setClaims(array $claims): void
     {
         $this->claims = $claims;
-    }
-
-    public function getFactionsManager() {
-        return new FactionsManager();
     }
 
     /**
