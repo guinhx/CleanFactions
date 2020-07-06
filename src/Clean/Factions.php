@@ -54,9 +54,6 @@ class Factions extends PluginBase {
         return self::$instance;
     }
 
-    /**
-     * @param Factions $instance
-     */
     private function registerInstance(): void
     {
         self::$instance = $this;
