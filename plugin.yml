@@ -1,0 +1,5 @@
+name: "CleanFactions"
+version: 1.0.0
+author: "Guinho1412 (@guinhx_s)"
+api: ["3.0.0", "4.0.0"]
+main: Clean\Factions
