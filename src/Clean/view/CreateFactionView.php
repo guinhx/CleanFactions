@@ -22,17 +22,12 @@ class CreateFactionView {
                 if(empty($data[1]) || empty($data[2])) {
                     $player->sendMessage("§cOps! Parece que você esqueceu de preencher algum campo.");
                 }else{
-                    $faction = new Faction();
-                    $faction->setId(count(Factions::getInstance()->getFactions())+1);
-                    $faction->setName($data[1]);
-                    $faction->setAbbrev($data[2]);
-                    $faction->insertMember($player->getName(), MemberRole::OWNER);
-                    $faction->setPower(5);
-                    $faction->setOwner($player->getName());
-                    $faction->setDescription($data[3]);
-                    Factions::getInstance()->insertFaction($faction);
-                    $player->sendMessage("§aVocê fundou a facção [" . $data[2] . "] " . $data[1] . " comece agora mesmo a recrutar membros.");
-                    Server::getInstance()->getAsyncPool()->submitTask(new LoadPlayerData($player->getName()));
+                	$result = Factions::getInstance()->createFaction($data[1], $data[2], $player->getName(), $data[3]);
+                	if($result) {
+						$player->sendMessage("§aVocê fundou a facção [" . $data[2] . "] " . $data[1] . " comece agora mesmo a recrutar membros.");
+					}else{
+                		$player->sendMessage("§cAlgo de errado aconteceu na hora da criação da facção.");
+					}
                 }
             }
         };

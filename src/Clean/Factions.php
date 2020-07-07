@@ -3,9 +3,11 @@
 namespace Clean;
 
 use Clean\async\LoadLocalStorage;
+use Clean\async\LoadPlayerData;
 use Clean\command\FactionCommand;
 use Clean\command\PoolCommand;
 use Clean\command\subcommand\CreateSubCommand;
+use Clean\enum\MemberRole;
 use Clean\event\player\CreateFactionPlayer;
 use Clean\event\player\PlayerJoinEvent;
 use Clean\event\view\ViewRequestEvent;
@@ -101,6 +103,23 @@ class Factions extends PluginBase {
     {
         $this->factions = $factions;
     }
+
+    public function createFaction(string $name, string $abbrev, string $owner, string $desc = null){
+		$faction = new Faction();
+		// depois fazer o esquema de pegar o result
+		// do query pra inserir o id aki
+		$faction->setId(count(Factions::getInstance()->getFactions())+1);
+		$faction->setName($name);
+		$faction->setAbbrev($abbrev);
+		$faction->insertMember($owner, MemberRole::OWNER);
+		$faction->setPower(5);
+		$faction->setOwner($owner);
+		$faction->setDescription(($desc == "" || is_null($desc)) ? "Sem descrição" : $desc);
+
+		$this->insertFaction($faction);
+		Server::getInstance()->getAsyncPool()->submitTask(new LoadPlayerData($owner));
+		return true;
+	}
 
     public function insertFaction(Faction $faction) {
         $this->factions[$faction->getId()] = $faction;
