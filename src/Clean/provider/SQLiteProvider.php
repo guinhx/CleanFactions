@@ -7,14 +7,24 @@ use Clean\object\Claim;
 use Clean\object\Faction;
 use Clean\object\Member;
 use pocketmine\Server;
+use SQLite3;
 
 class SQLiteProvider {
+
+	/** @var SQLite3 */
     private $database;
+
+    /** @var string */
     private $path;
-    public function __construct(string $path)
+
+	/**
+	 * SQLiteProvider constructor.
+	 * @param string $path
+	 */
+	public function __construct(string $path)
     {
         $this->path = $path;
-        $this->database = new \SQLite3($path."factions.db");
+        $this->database = new SQLite3($path . "factions.db");
     }
 
     public function convertFromFactionsPro() {
@@ -22,10 +32,14 @@ class SQLiteProvider {
     }
 
     public function setFactionsFromLocal() {
-
+		// TODO: Set all factions from local storage
     }
 
-    public function getFactionsFromDatabase() {
+	/**
+	 * @return Faction[]
+	 */
+	public function getFactionsFromDatabase(): array
+	{
         $factions = [];
         $res = $this->database->query("SELECT * FROM faction");
         while ($data = $res->fetchArray(SQLITE3_ASSOC)) {
@@ -53,10 +67,16 @@ class SQLiteProvider {
         return $factions;
     }
 
-    public function setClaimsFromLocal() {
+    public function setClaimsFromLocal(): void
+	{
+		// TODO: Set claims from local storage
     }
 
-    public function getClaimsFromDatabase() {
+	/**
+	 * @return Claim[]
+	 */
+	public function getClaimsFromDatabase(): array
+	{
         $claims = [];
         $res = $this->database->query("SELECT * FROM claim");
         while ($data = $res->fetchArray(SQLITE3_ASSOC)) {

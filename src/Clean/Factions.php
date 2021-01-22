@@ -23,8 +23,28 @@ class Factions extends PluginBase
 {
 	const PREFIX = "[CleanFactions]";
 	const VERSION = "1.0.0";
+
 	/* @var Factions */
 	private static $instance;
+
+	/**
+	 * @return Factions
+	 */
+	public static function getInstance(): Factions
+	{
+		return self::$instance;
+	}
+
+	/**
+	 * @param string $message
+	 * @param bool $prefix
+	 */
+	public static function debug(string $message, bool $prefix = true): void
+	{
+		$message = $prefix ? self::PREFIX . " " . $message : $message;
+		Server::getInstance()->getLogger()->notice($message);
+	}
+
 	/* @var Faction[] */
 	private $factions = [];
 	/* @var Claim[] */
@@ -47,14 +67,6 @@ class Factions extends PluginBase
 		$this->registerEvent();
 		self::debug("Loading state has finished, prepare to the war!");
 		$this->getProvider()->getFactionsFromDatabase();
-	}
-
-	/**
-	 * @return Factions
-	 */
-	public static function getInstance(): Factions
-	{
-		return self::$instance;
 	}
 
 	private function registerInstance(): void
@@ -108,11 +120,17 @@ class Factions extends PluginBase
 		$this->factions = $factions;
 	}
 
-	public function createFaction(string $name, string $abbrev, string $owner, string $desc = null)
+	/**
+	 * @param string $name
+	 * @param string $abbrev
+	 * @param string $owner
+	 * @param string|null $desc
+	 * @return bool
+	 */
+	public function createFaction(string $name, string $abbrev, string $owner, string $desc = null): bool
 	{
 		$faction = new Faction();
-		// depois fazer o esquema de pegar o result
-		// do query pra inserir o id aki
+		// TODO: Get id from sql result to put on faction id
 		$faction->setId(count(Factions::getInstance()->getFactions()) + 1);
 		$faction->setName($name);
 		$faction->setAbbrev($abbrev);
@@ -126,13 +144,20 @@ class Factions extends PluginBase
 		return true;
 	}
 
+	/**
+	 * @param Faction $faction
+	 */
 	public function insertFaction(Faction $faction)
 	{
 		$this->factions[$faction->getId()] = $faction;
-		// não precisa salvar de imediato na db, pois ao desligar já vai salvar tudo do array mesmo.
+		// não precisa salvar de imediato na db, pois ao desligar já vai salvar tudo do array mesmo
 	}
 
-	public function removeFaction(Faction $faction)
+	/**
+	 * @param Faction $faction
+	 * @return bool
+	 */
+	public function removeFaction(Faction $faction): bool
 	{
 		if (array_key_exists($faction->getId(), $this->factions)) {
 			foreach ($faction->getMembers() as $member) {
@@ -142,13 +167,10 @@ class Factions extends PluginBase
 				}
 			}
 			unset($this->factions[$faction->getId()]);
+			// TODO: Remove faction from database
 			return true;
-			// code aqui para remover da database também.. pq na hora de salvar pode dar b.o
-			// code
-			// code
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	/**
@@ -177,7 +199,7 @@ class Factions extends PluginBase
 	}
 
 	/**
-	 * @param $player
+	 * @param Player|string $player
 	 * @return Faction|null
 	 */
 	public function getFactionByPlayer($player)
@@ -193,19 +215,17 @@ class Factions extends PluginBase
 		return null;
 	}
 
-	public function getFactionNameByPlayer($player)
+	/**
+	 * @param Player|string $player
+	 * @return string|null
+	 */
+	public function getFactionNameByPlayer($player): ?string
 	{
 		if ($player instanceof Player) {
 			$player = $player->getName();
 		}
 		$faction = $this->getFactionByPlayer($player);
-		return !is_null($faction) ? $faction->getName() : null;
-	}
-
-	public static function debug(string $message, bool $prefix = true)
-	{
-		$message = $prefix ? self::PREFIX . " " . $message : $message;
-		Server::getInstance()->getLogger()->notice($message);
+		return is_null($faction) ? null : $faction->getName();
 	}
 
 }

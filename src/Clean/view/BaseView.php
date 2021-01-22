@@ -4,16 +4,28 @@ namespace Clean\view;
 
 use Clean\FactionPlayer;
 use Clean\view\icon\ButtonIcon;
+use jojoe77777\FormAPI\Form;
 use jojoe77777\FormAPI\SimpleForm;
 use pocketmine\Player;
 
 abstract class BaseView {
+
+	/** @var string */
     protected $name = "";
+
+    /** @var string */
     protected $content = "";
+
+    /** @var array */
     protected $buttons = [];
+
+    /** @var Form|null */
     protected $form;
 
-    private function generate()
+	/** @var int */
+	private $type;
+
+	private function generate(): void
     {
         $this->form = new SimpleForm($this->getCallable());
         $this->form->setTitle($this->name);
@@ -29,7 +41,7 @@ abstract class BaseView {
         }
     }
 
-    public function getCallable()
+    public function getCallable(): callable
     {
         $buttons = $this->buttons;
         return function (Player $player, $data) use(&$buttons)
@@ -40,19 +52,37 @@ abstract class BaseView {
             }
         };
     }
-    public function setName(string $name) {
+
+	/**
+	 * @param string $name
+	 */
+	public function setName(string $name) {
         $this->name = $name;
     }
-    public function setType(int $type)
+
+	/**
+	 * @param int $type
+	 */
+	public function setType(int $type)
     {
         $this->type = $type;
     }
-    public function setContent($content)
+
+	/**
+	 * @param $content
+	 */
+	public function setContent($content): void
     {
         if(is_array($content)) $content = implode("\n", $content);
         $this->content = $content;
     }
-    public function addButton($name, callable $callback, $image = null)
+
+	/**
+	 * @param $name
+	 * @param callable $callback
+	 * @param null $image
+	 */
+	public function addButton($name, callable $callback, $image = null): void
     {
         if(is_array($name)) $name = implode("\n", $name);
         if($image == null) $image = new ButtonIcon();
@@ -63,9 +93,15 @@ abstract class BaseView {
         ];
     }
 
-    public abstract function load(FactionPlayer $player);
+	/**
+	 * @param FactionPlayer $player
+	 */
+	public abstract function load(FactionPlayer $player);
 
-    public function send(FactionPlayer $player)
+	/**
+	 * @param FactionPlayer $player
+	 */
+	public function send(FactionPlayer $player)
     {
         $this->load($player);
         $this->generate();

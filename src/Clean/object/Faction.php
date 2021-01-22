@@ -4,25 +4,46 @@ namespace Clean\object;
 
 use Clean\enum\MemberRole;
 
-class Faction {
-    private $id = 0;
-    private $abbrev;
-    private $name = "";
-    private $description = "";
-    private $owner = "";
-    private $members = [];
-    private $memberLimit = 10;
-    private $claimIds = [];
-    private $power = 0;
-    private $powerLimit = 50;
+class Faction
+{
 
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
+	/** @var int */
+	private $id = 0;
+
+	/** @var mixed */
+	private $abbrev;
+
+	/** @var string */
+	private $name = "";
+
+	/** @var string */
+	private $description = "";
+
+	/** @var string */
+	private $owner = "";
+
+	/** @var Member[] */
+	private $members = [];
+
+	/** @var int */
+	private $memberLimit = 10;
+
+	/** @var int[] */
+	private $claimIds = [];
+
+	/** @var int */
+	private $power = 0;
+
+	/** @var int */
+	private $powerLimit = 50;
+
+	/**
+	 * @return int
+	 */
+	public function getId(): int
+	{
+		return $this->id;
+	}
 
     /**
      * @param int $id
@@ -94,35 +115,46 @@ class Faction {
     public function setOwner(string $owner): void
     {
         $this->owner = $owner;
-    }
+	}
 
-    /**
-     * @param string $owner
-     * @return bool
-     * */
-    public function isOwner(string $owner) : bool {
-        return strtolower($this->owner) == strtolower($owner);
-    }
+	/**
+	 * @param string $owner
+	 * @return bool
+	 * */
+	public function isOwner(string $owner): bool
+	{
+		return strtolower($this->owner) == strtolower($owner);
+	}
 
-    public function insertMember(string $name, int $role = MemberRole::MEMBER) {
-        $member = new Member();
-        $member->setFid($this->id);
-        $member->setName($name);
-        $member->setRole($role);
-        $this->members[strtolower($name)] = $member;
-    }
+	/**
+	 * @param string $name
+	 * @param int $role
+	 */
+	public function insertMember(string $name, int $role = MemberRole::MEMBER)
+	{
+		$member = new Member();
+		$member->setFid($this->id);
+		$member->setName($name);
+		$member->setRole($role);
+		$this->members[strtolower($name)] = $member;
+	}
 
-    public function removeMember(string $name) {
-        unset($this->members[strtolower($name)]);
-    }
+	/**
+	 * @param string $name
+	 */
+	public function removeMember(string $name)
+	{
+		unset($this->members[strtolower($name)]);
+	}
 
-    /**
-     * @param string $name
-     * @return Member|null
-     */
-    public function getMember(string $name) {
-        return array_key_exists(strtolower($name), $this->members) ? $this->members[strtolower($name)] : null;
-    }
+	/**
+	 * @param string $name
+	 * @return Member|null
+	 */
+	public function getMember(string $name)
+	{
+		return array_key_exists(strtolower($name), $this->members) ? $this->members[strtolower($name)] : null;
+	}
 
     /**
      * @return Member[]

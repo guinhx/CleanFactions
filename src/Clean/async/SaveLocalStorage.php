@@ -8,6 +8,6 @@ class SaveLocalStorage extends AsyncTask {
 
     public function onRun()
     {
-        // TODO: Implement onRun() method.
+        // TODO: Save local storage
     }
 }

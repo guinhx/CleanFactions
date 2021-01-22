@@ -16,7 +16,6 @@ class MemberRole {
                 return "Officer";
             case self::OWNER:
                 return "Leader";
-            case self::UNKNOWN:
             default:
                 return "unknown";
         }

@@ -8,7 +8,10 @@ use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerCreationEvent;
 
 class CreateFactionPlayer implements Listener {
+
+	/** @var Factions */
     private $plugin;
+
     public function __construct()
     {
         $this->plugin = Factions::getInstance();

@@ -4,18 +4,25 @@ namespace Clean\object;
 
 use Clean\enum\MemberRole;
 
-class Member {
-    private $fid = 0;
-    private $name = "";
-    private $role = MemberRole::MEMBER;
+class Member
+{
 
-    /**
-     * @return int
-     */
-    public function getFid(): int
-    {
-        return $this->fid;
-    }
+	/** @var int */
+	private $fid = 0;
+
+	/** @var string */
+	private $name = "";
+
+	/** @var int */
+	private $role = MemberRole::MEMBER;
+
+	/**
+	 * @return int
+	 */
+	public function getFid(): int
+	{
+		return $this->fid;
+	}
 
     /**
      * @param int $fid

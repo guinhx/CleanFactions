@@ -6,11 +6,15 @@ use Clean\enum\MemberRole;
 use pocketmine\Player;
 
 class FactionPlayer extends Player {
-    private $fid = "";
+
+	/** @var int */
+    private $fid = -1;
+
+    /** @var int */
     private $role = MemberRole::UNKNOWN;
 
     public function resetData() {
-        $this->fid = "";
+        $this->fid = -1;
         $this->role = MemberRole::UNKNOWN;
     }
 
@@ -46,12 +50,11 @@ class FactionPlayer extends Player {
         $this->role = $role;
     }
 
-
     /**
      * @return bool
      */
     public function hasFaction(): bool {
-        return is_numeric($this->fid) && !is_null($this->fid);
+        return is_numeric($this->fid) && $this->fid != -1;
     }
 
     /**

@@ -4,34 +4,49 @@ namespace Clean\command\subcommand;
 
 use pocketmine\command\CommandSender;
 
-abstract class BaseCommand {
-    protected $label;
-    protected $name;
-    protected $description;
-    protected $permission;
-    protected $aliases = [];
+abstract class BaseCommand
+{
 
-    /**
-     * BaseCommand constructor.
-     * @param $label
-     */
-    public function __construct($label)
-    {
-        $this->label = $label;
-    }
+	/** @var mixed */
+	protected $label;
 
+	/** @var mixed */
+	protected $name;
 
-    public function execute(CommandSender $sender, array $args) : void{
-        if (!$this->checkPermission($sender)) {
-            $sender->sendMessage("You don't have permission to execute this command.");
-        }else{
-            $this->onCommand($sender, $args);
-        }
-    }
+	/** @var mixed */
+	protected $description;
 
-    /**
-     * @param CommandSender $sender
-     * @param String[]      $args
+	/** @var mixed */
+	protected $permission;
+
+	/** @var array */
+	protected $aliases = [];
+
+	/**
+	 * BaseCommand constructor.
+	 * @param $label
+	 */
+	public function __construct($label)
+	{
+		$this->label = $label;
+	}
+
+	/**
+	 * @param CommandSender $sender
+	 * @param array $args
+	 */
+	public function execute(CommandSender $sender, array $args): void
+	{
+		if (!$this->checkPermission($sender)) {
+			$sender->sendMessage("You don't have permission to execute this command.");
+		} else {
+			$this->onCommand($sender, $args);
+		}
+	}
+
+	/**
+	 * @param CommandSender $sender
+	 * @param String[] $args
      *
      * @return bool
      */

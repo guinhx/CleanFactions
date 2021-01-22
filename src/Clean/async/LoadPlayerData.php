@@ -9,7 +9,10 @@ use pocketmine\scheduler\AsyncTask;
 use pocketmine\Server;
 
 class LoadPlayerData extends AsyncTask {
+
+	/** @var string */
     private $nickname;
+
     public function __construct(string $nickname)
     {
         $this->nickname = $nickname;
